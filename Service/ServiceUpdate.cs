@@ -17,32 +17,54 @@ namespace Service
         {
 
             // string path = @"c:\0000\testPOU.docx";
-            string path = @way;
+            string path = @appPath + "Download\\" + way;
             FileStream file = File.Open(path, FileMode.Open);
             return file;
         }
 
         string appPath = AppDomain.CurrentDomain.BaseDirectory;
+        //Directory.CreateDirectory(appPath + "Download");
+         //   string[] filename = Directory.GetFiles(appPath + "Download");
 
         public string[] getFileinfo()
         {
-         //   Console.WriteLine(appPath);
+            //   Console.WriteLine(appPath);
             Directory.CreateDirectory(appPath + "Download");
             string[] filename = Directory.GetFiles(appPath + "Download");
-            Console.WriteLine("Файлы на передачу: \n");
-            for (int i = 0; i < filename.Length; i++)
+
+            List<string> filename1 = new List<string>();
+           /* for(int i=0; i<filename.Length; i++)
             {
-                Console.WriteLine(filename[i]);
+                filename1.Add(Path.GetFileName(filename[i]));
+            }*/
+
+           
+            //string[] files = Directory.GetFiles(@"c:\0000");
+            WayDir(appPath + "Download",filename1);
+           // string[] filename3 = filename1.ToArray();
+           // fille.Clear();
+            string[] filename2 = filename1.ToArray();
+            Console.WriteLine("Файлы на передачу: \n");
+
+            List<string> qq = new List<string>();
+
+            for (int i = 0; i < filename2.Length; i++)
+            {
+                string[] q = filename2[i].Split(new[] { "\\Download\\" }, StringSplitOptions.None);
+                qq.Add(q[1]);
+                Console.WriteLine(q[1] + "\n");
             }
-                //string[] files = Directory.GetFiles(@"c:\0000");
-            return filename;
+
+            string[] filename3 = qq.ToArray();
+            return filename3;
         }
 
         public int LenghtFile(string way)
         {
+           // Directory.CreateDirectory(appPath + "Download");
             int lenght = 0;
             // string path = @"c:\0000\testPOU.docx";
-            string path = @way;
+            string path = @appPath + "Download\\" + way;
             FileStream file = File.Open(path, FileMode.Open);
             lenght = (int)file.Length;
             file.Close();
@@ -50,12 +72,30 @@ namespace Service
             return lenght;
         }
 
-    //    public string Update()
-     //   {
-    //        Console.WriteLine("Пришло сообщение");
-    //        return "Privet";
-    //    }
+        //    public string Update()
+        //   {
+        //        Console.WriteLine("Пришло сообщение");
+        //        return "Privet";
+        //    }
 
-        
+      
+
+        public static void WayDir(string FromDir, List<string> fileway) //На вход методу подаётся путь откуда копируем и куда копируем
+        {
+           // Directory.CreateDirectory(ToDir);
+            foreach (string s1 in Directory.GetFiles(FromDir))
+            {
+                // string s2 = ToDir + "\\" + System.IO.Path.GetFileName(s1);
+                // File.Copy(s1, s2, true);
+                // List<string> file9 = new List<string>();
+                //fille.Add(s1);
+                fileway.Add(s1);
+            }
+            foreach (string s in Directory.GetDirectories(FromDir))
+            {
+                WayDir(s,fileway);
+            }
+
+        }
     }
 }
